@@ -177,9 +177,8 @@ class dashgoals extends Module
         if (preg_match('/^DASHGOALS_([A-Z_]+)_([0-9]{2})/', $key, $matches)) {
             if ($matches[1] == 'TRAFFIC') {
                 return $start[$matches[1]] * (1 + ($matches[2] - 1) / 10);
-            } else {
-                return $start[$matches[1]];
             }
+            return $start[$matches[1]];
         }
     }
 
