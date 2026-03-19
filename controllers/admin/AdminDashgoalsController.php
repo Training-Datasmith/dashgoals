@@ -35,6 +35,10 @@ class AdminDashgoalsController extends ModuleAdminController
     public function ajaxProcessChangeConfYear()
     {
         $year = (int) Tools::getValue('year');
+        if ($year < 2000 || $year > 2100) {
+            $year = (int) Configuration::get('PS_DASHGOALS_CURRENT_YEAR');
+        }
+
         Configuration::updateValue('PS_DASHGOALS_CURRENT_YEAR', $year);
         $months = $this->module->setMonths($year);
 

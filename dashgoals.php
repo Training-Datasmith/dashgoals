@@ -163,7 +163,7 @@ class dashgoals extends Module
 
     public function hookDashboardData($params)
     {
-        $year = ((isset($params['extra']) && $params['extra'] > 1970 && $params['extra'] < 2999) ? $params['extra'] : Configuration::get('PS_DASHGOALS_CURRENT_YEAR'));
+        $year = (isset($params['extra']) && (int) $params['extra'] > 1970 && (int) $params['extra'] < 2999) ? (int) $params['extra'] : (int) Configuration::get('PS_DASHGOALS_CURRENT_YEAR');
 
         return ['data_chart' => ['dash_goals_chart1' => $this->getChartData($year)]];
     }
