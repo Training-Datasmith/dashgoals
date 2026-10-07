@@ -36,28 +36,5 @@ run_docker run --rm \
       echo "PHP tokenizer extension is required for PHPUnit" >&2
       exit 1
     fi
-    VENDOR_BACKUP=""
-    if [ -d vendor ]; then
-      VENDOR_BACKUP="/tmp/dashgoals-vendor-backup"
-      rm -rf "$VENDOR_BACKUP"
-      mv vendor "$VENDOR_BACKUP"
-    fi
-    TEST_FILES=(
-      tests/AdminDashgoalsControllerTest.php
-      tests/ChartDataTest.php
-      tests/DashboardHooksTest.php
-      tests/FakeConfigurationKpiTest.php
-      tests/GetValuesFromGoalsTest.php
-      tests/HookDashboardDataTest.php
-      tests/InstallUninstallTest.php
-      tests/SetMonthsTest.php
-    )
-    OVERALL=0
-    for TEST_FILE in "${TEST_FILES[@]}"; do
-      php "$PHAR" --bootstrap tests/bootstrap.php --configuration phpunit.xml.dist "$TEST_FILE" || OVERALL=1
-    done
-    if [ -n "$VENDOR_BACKUP" ] && [ -d "$VENDOR_BACKUP" ]; then
-      mv "$VENDOR_BACKUP" vendor
-    fi
-    exit $OVERALL
+    php "$PHAR" --configuration phpunit.xml.dist "$@"
   ' -- "$@"

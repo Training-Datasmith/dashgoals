@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
+<phpunit bootstrap="tests/bootstrap.php"
+         backupGlobals="false"
          backupStaticAttributes="false"
          colors="false"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         verbose="true"/>
+         verbose="true">
+    <testsuites>
+        <testsuite name="DashgoalsModule">
+            <file>tests/AdminDashgoalsControllerTest.php</file>
+            <file>tests/ChartDataTest.php</file>
+            <file>tests/DashboardHooksTest.php</file>
+            <file>tests/FakeConfigurationKpiTest.php</file>
+            <file>tests/GetValuesFromGoalsTest.php</file>
+            <file>tests/HookDashboardDataTest.php</file>
+            <file>tests/InstallUninstallTest.php</file>
+            <file>tests/SetMonthsTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
