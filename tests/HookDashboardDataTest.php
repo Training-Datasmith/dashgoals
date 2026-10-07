@@ -17,7 +17,6 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
-
 class HookDashboardDataTest extends DashgoalsTestCase
 {
     private function seedYearGoals()
@@ -27,7 +26,7 @@ class HookDashboardDataTest extends DashgoalsTestCase
         ConfigurationKPI::updateValue('DASHGOALS_TRAFFIC_01_2020', 111);
         ConfigurationKPI::updateValue('DASHGOALS_TRAFFIC_01_2024', 333);
         ConfigurationKPI::updateValue('DASHGOALS_TRAFFIC_01_2998', 444);
-        for ($m = 1; $m <= 12; $m++) {
+        for ($m = 1; $m <= 12; ++$m) {
             $mm = sprintf('%02d', $m);
             ConfigurationKPI::updateValue('DASHGOALS_CONVERSION_' . $mm . '_2020', 2);
             ConfigurationKPI::updateValue('DASHGOALS_AVG_CART_VALUE_' . $mm . '_2020', 40);
@@ -38,7 +37,7 @@ class HookDashboardDataTest extends DashgoalsTestCase
     public function testWrapperShape()
     {
         $this->seedYearGoals();
-        $payload = $this->module->hookDashboardData(array('extra' => 2024));
+        $payload = $this->module->hookDashboardData(['extra' => 2024]);
         $this->assertEquals('bar_chart_goals', $payload['data_chart']['dash_goals_chart1']['chart_type']);
         $byKey = ChartTestSupport::seriesByKey($payload['data_chart']['dash_goals_chart1']);
         $this->assertEquals(333, ChartTestSupport::monthPoint($byKey['traffic_real'], 0)['goal']);
@@ -50,9 +49,9 @@ class HookDashboardDataTest extends DashgoalsTestCase
     public function testExtraYearInsideRange($extra, $expectedGoal, $yearPrefix)
     {
         $this->seedYearGoals();
-        $payload = $this->module->hookDashboardData(array('extra' => $extra));
+        $payload = $this->module->hookDashboardData(['extra' => $extra]);
         $this->assertEquals(
-            array(false, $yearPrefix . '-01-01', $yearPrefix . '-12-31', 'month'),
+            [false, $yearPrefix . '-01-01', $yearPrefix . '-12-31', 'month'],
             AdminStatsController::$visitsCalls[0]
         );
         $byKey = ChartTestSupport::seriesByKey($payload['data_chart']['dash_goals_chart1']);
@@ -61,11 +60,11 @@ class HookDashboardDataTest extends DashgoalsTestCase
 
     public function validExtraYears()
     {
-        return array(
-            array(1971, 222, '1971'),
-            array(2998, 444, '2998'),
-            array('2024', 333, '2024'),
-        );
+        return [
+            [1971, 222, '1971'],
+            [2998, 444, '2998'],
+            ['2024', 333, '2024'],
+        ];
     }
 
     /**
@@ -74,7 +73,7 @@ class HookDashboardDataTest extends DashgoalsTestCase
     public function testExtraOutsideRangeFallsBackToConfiguredYear($extra)
     {
         $this->seedYearGoals();
-        $params = array();
+        $params = [];
         if ($extra !== '__missing__') {
             $params['extra'] = $extra;
         }
@@ -82,20 +81,20 @@ class HookDashboardDataTest extends DashgoalsTestCase
         $byKey = ChartTestSupport::seriesByKey($payload['data_chart']['dash_goals_chart1']);
         $this->assertEquals(111, ChartTestSupport::monthPoint($byKey['traffic_real'], 0)['goal']);
         $this->assertEquals(
-            array(false, '2020-01-01', '2020-12-31', 'month'),
+            [false, '2020-01-01', '2020-12-31', 'month'],
             AdminStatsController::$visitsCalls[0]
         );
     }
 
     public function invalidExtraYears()
     {
-        return array(
-            array(1970),
-            array(2999),
-            array('abc'),
-            array(''),
-            array(false),
-            array('__missing__'),
-        );
+        return [
+            [1970],
+            [2999],
+            ['abc'],
+            [''],
+            [false],
+            ['__missing__'],
+        ];
     }
 }

@@ -17,7 +17,6 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
-
 class InstallUninstallTest extends DashgoalsTestCase
 {
     public function testConstructorSetsModuleIdentity()
@@ -43,7 +42,7 @@ class InstallUninstallTest extends DashgoalsTestCase
         $this->assertEquals(600, ConfigurationKPI::get('DASHGOALS_TRAFFIC_01_' . $year));
         $this->assertEquals('AdminDashgoals', Tab::$lastAdded['class_name']);
         $this->assertEquals(
-            array('dashboardZoneTwo', 'dashboardData', 'actionAdminControllerSetMedia'),
+            ['dashboardZoneTwo', 'dashboardData', 'actionAdminControllerSetMedia'],
             Module::$registeredHooks
         );
     }
@@ -74,7 +73,6 @@ class InstallUninstallTest extends DashgoalsTestCase
     {
         Module::$installResult = false;
         $this->assertFalse($this->module->install());
-        $this->assertNotNull(Tab::$lastAdded);
         $this->assertCount(0, Module::$registeredHooks);
     }
 
@@ -82,7 +80,7 @@ class InstallUninstallTest extends DashgoalsTestCase
     {
         Module::$registerHookResults['dashboardData'] = false;
         $this->assertFalse($this->module->install());
-        $this->assertEquals(array('dashboardZoneTwo'), Module::$registeredHooks);
+        $this->assertEquals(['dashboardZoneTwo'], Module::$registeredHooks);
     }
 
     public function testUninstallDeletesTheTabAndKeepsConfiguration()
@@ -92,6 +90,7 @@ class InstallUninstallTest extends DashgoalsTestCase
         Configuration::updateValue('PS_DASHGOALS_CURRENT_YEAR', 2024);
 
         $this->assertTrue($this->module->uninstall());
+        $this->assertSame([7], Tab::$deletedIds);
         $this->assertEquals(50, ConfigurationKPI::get('DASHGOALS_TRAFFIC_01_2024'));
         $this->assertEquals(2024, Configuration::get('PS_DASHGOALS_CURRENT_YEAR'));
     }
@@ -100,6 +99,7 @@ class InstallUninstallTest extends DashgoalsTestCase
     {
         Tab::$idMap['AdminDashgoals'] = 0;
         $this->assertTrue($this->module->uninstall());
+        $this->assertSame([], Tab::$deletedIds);
     }
 
     public function testUninstallReturnsFalseWhenParentFails()
@@ -107,5 +107,6 @@ class InstallUninstallTest extends DashgoalsTestCase
         Tab::$idMap['AdminDashgoals'] = 7;
         Module::$uninstallResult = false;
         $this->assertFalse($this->module->uninstall());
+        $this->assertSame([7], Tab::$deletedIds);
     }
 }

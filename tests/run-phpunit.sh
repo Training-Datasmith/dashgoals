@@ -27,11 +27,12 @@ run_docker run --rm \
     set -euo pipefail
     PHAR="tests/tools/phpunit-4.8.36.phar"
     if [ ! -f "$PHAR" ]; then
-      curl -sSL -o "$PHAR" https://phar.phpunit.de/phpunit-4.8.36.phar
+      curl -fsSL -o "$PHAR" https://phar.phpunit.de/phpunit-4.8.36.phar
     fi
-    if [ -f tests/tools/phpunit-4.8.36.phar.sha256 ]; then
-      (cd tests/tools && sha256sum -c phpunit-4.8.36.phar.sha256)
-    fi
+    (cd tests/tools && sha256sum -c phpunit-4.8.36.phar.sha256) || {
+      rm -f "$PHAR"
+      exit 1
+    }
     if ! php -m | grep -q tokenizer; then
       echo "PHP tokenizer extension is required for PHPUnit" >&2
       exit 1

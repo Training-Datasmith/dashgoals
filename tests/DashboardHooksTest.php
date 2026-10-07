@@ -17,7 +17,6 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
-
 class DashboardHooksTest extends DashgoalsTestCase
 {
     public function testZoneTwoAssignsSmartyAndRendersTheTemplate()
@@ -25,7 +24,7 @@ class DashboardHooksTest extends DashgoalsTestCase
         Configuration::updateValue('PS_DASHGOALS_CURRENT_YEAR', 2024);
         ConfigurationKPI::updateValue('DASHGOALS_TRAFFIC_01_2024', 111);
 
-        $html = $this->module->hookDashboardZoneTwo(array());
+        $html = $this->module->hookDashboardZoneTwo([]);
         $this->assertEquals('dashboard_zone_two.tpl', $html);
         $assign = Context::getContext()->smarty->lastAssign;
         $this->assertEquals(2024, $assign['goals_year']);
@@ -40,14 +39,14 @@ class DashboardHooksTest extends DashgoalsTestCase
         Tools::$values['dashgoals_traffic_01_2024'] = 222;
         Tools::$values['dashgoals_conversion_01_2024'] = 3;
         Tools::$values['dashgoals_avg_cart_value_01_2024'] = 55;
-        for ($m = 2; $m <= 12; $m++) {
+        for ($m = 2; $m <= 12; ++$m) {
             $mm = sprintf('%02d', $m);
             Tools::$values['dashgoals_traffic_' . $mm . '_2024'] = 100;
             Tools::$values['dashgoals_conversion_' . $mm . '_2024'] = 2;
             Tools::$values['dashgoals_avg_cart_value_' . $mm . '_2024'] = 40;
         }
 
-        $this->module->hookDashboardZoneTwo(array());
+        $this->module->hookDashboardZoneTwo([]);
         $this->assertEquals(222.0, ConfigurationKPI::$store['DASHGOALS_TRAFFIC_01_2024']);
     }
 
@@ -55,7 +54,7 @@ class DashboardHooksTest extends DashgoalsTestCase
     {
         Context::getContext()->controller = new AdminDashboardController();
         $this->module->hookActionAdminControllerSetMedia();
-        $this->assertEquals(array('/modules/dashgoals/views/js/dashgoals.js'), AdminDashboardController::$jsPaths);
+        $this->assertEquals(['/modules/dashgoals/views/js/dashgoals.js'], AdminDashboardController::$jsPaths);
 
         PrestaShopStub::reset();
         $this->module = new dashgoals();

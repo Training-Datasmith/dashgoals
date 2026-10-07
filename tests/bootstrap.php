@@ -17,7 +17,7 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
-
+error_reporting(-1);
 date_default_timezone_set('UTC');
 
 if (!defined('_PS_VERSION_')) {

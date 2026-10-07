@@ -17,12 +17,11 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
-
 class ChartTestSupport
 {
     public static function seriesByKey($chartData)
     {
-        $map = array();
+        $map = [];
         foreach ($chartData['data'] as $series) {
             $map[$series['key']] = $series;
         }
@@ -38,28 +37,28 @@ class ChartTestSupport
     public static function seed2024Grid()
     {
         $year = 2024;
-        for ($m = 1; $m <= 12; $m++) {
+        for ($m = 1; $m <= 12; ++$m) {
             $mm = sprintf('%02d', $m);
             ConfigurationKPI::updateValue('DASHGOALS_TRAFFIC_' . $mm . '_' . $year, 1000);
             ConfigurationKPI::updateValue('DASHGOALS_CONVERSION_' . $mm . '_' . $year, 2.5);
             ConfigurationKPI::updateValue('DASHGOALS_AVG_CART_VALUE_' . $mm . '_' . $year, 40);
         }
 
-        AdminStatsController::$visitsSeries = array(
+        AdminStatsController::$visitsSeries = [
             strtotime('2024-01-01') => 2000,
             strtotime('2024-02-01') => 500,
             strtotime('2024-04-01') => 1000,
-        );
-        AdminStatsController::$ordersSeries = array(
+        ];
+        AdminStatsController::$ordersSeries = [
             strtotime('2024-01-01') => 40,
             strtotime('2024-02-01') => 5,
             strtotime('2024-04-01') => 25,
-        );
-        AdminStatsController::$salesSeries = array(
+        ];
+        AdminStatsController::$salesSeries = [
             strtotime('2024-01-01') => 5000,
             strtotime('2024-02-01') => 100,
             strtotime('2024-04-01') => 1000,
-        );
+        ];
         Configuration::updateValue('PS_DASHBOARD_SIMULATION', false);
     }
 }

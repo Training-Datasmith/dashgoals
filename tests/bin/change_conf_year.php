@@ -17,6 +17,7 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
+ini_set('display_errors', 'stderr');
 
 if ($argc < 3) {
     fwrite(STDERR, "Usage: change_conf_year.php <result-file> <year> [kpi-json]\n");
@@ -25,7 +26,7 @@ if ($argc < 3) {
 
 $resultFile = $argv[1];
 $year = $argv[2];
-$kpiSeed = array();
+$kpiSeed = [];
 if (isset($argv[3]) && $argv[3] !== '') {
     $kpiSeed = json_decode($argv[3], true);
     if (!is_array($kpiSeed)) {
@@ -49,12 +50,12 @@ $controller->module = $module;
 $controller->context = Context::getContext();
 
 register_shutdown_function(function () use ($resultFile) {
-    $payload = array(
+    $payload = [
         'year' => Configuration::get('PS_DASHGOALS_CURRENT_YEAR'),
         'kpi' => ConfigurationKPI::$store,
         'smarty' => Context::getContext()->smarty->lastAssign,
         'display' => Module::$displayCalls,
-    );
+    ];
     file_put_contents($resultFile, json_encode($payload));
 });
 

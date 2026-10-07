@@ -17,7 +17,6 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
-
 class ChartDataTest extends DashgoalsTestCase
 {
     public function testNonSimulationJanuaryFebruaryAprilAndZeroMonths()
@@ -32,9 +31,20 @@ class ChartDataTest extends DashgoalsTestCase
         }
 
         $byKey = ChartTestSupport::seriesByKey($chart);
-        $this->assertEquals('traffic_real', $byKey['traffic_real']['key']);
-        $this->assertEquals('Goal not reached', $byKey['traffic_less']['zone_text']);
-        $this->assertEquals('Goal set:', $byKey['traffic_less']['empty_zone_text']);
+        $expectedKeys = [
+            'traffic_real', 'traffic_more', 'traffic_less',
+            'conversion_real', 'conversion_more', 'conversion_less',
+            'avg_cart_value_real', 'avg_cart_value_more', 'avg_cart_value_less',
+            'sales_real', 'sales_more', 'sales_less',
+        ];
+        $this->assertSame($expectedKeys, array_map(function ($series) {
+            return $series['key'];
+        }, $chart['data']));
+        foreach (['traffic', 'conversion', 'avg_cart_value', 'sales'] as $metric) {
+            $lessKey = $metric . '_less';
+            $this->assertEquals('Goal not reached', $byKey[$lessKey]['zone_text']);
+            $this->assertEquals('Goal set:', $byKey[$lessKey]['empty_zone_text']);
+        }
 
         $janTraffic = ChartTestSupport::monthPoint($byKey['traffic_real'], 0);
         $this->assertEquals(1, $janTraffic['y'], '', 0.001);
@@ -48,7 +58,7 @@ class ChartDataTest extends DashgoalsTestCase
         $this->assertArrayNotHasKey('goal_diff', ChartTestSupport::monthPoint($byKey['traffic_real'], 2));
 
         $this->assertEquals(
-            array(false, '2024-01-01', '2024-12-31', 'month'),
+            [false, '2024-01-01', '2024-12-31', 'month'],
             AdminStatsController::$visitsCalls[0]
         );
     }
@@ -56,9 +66,9 @@ class ChartDataTest extends DashgoalsTestCase
     public function testMissingStatsAreZeroAndPresentGoalsRemain()
     {
         ChartTestSupport::seed2024Grid();
-        AdminStatsController::$visitsSeries = array();
-        AdminStatsController::$ordersSeries = array();
-        AdminStatsController::$salesSeries = array();
+        AdminStatsController::$visitsSeries = [];
+        AdminStatsController::$ordersSeries = [];
+        AdminStatsController::$salesSeries = [];
 
         $chart = $this->module->getChartData(2024);
         $byKey = ChartTestSupport::seriesByKey($chart);
@@ -76,7 +86,7 @@ class ChartDataTest extends DashgoalsTestCase
         $this->assertCount(0, AdminStatsController::$visitsCalls);
 
         $byKey = ChartTestSupport::seriesByKey($chart);
-        for ($i = 0; $i < 12; $i++) {
+        for ($i = 0; $i < 12; ++$i) {
             $traffic = ChartTestSupport::monthPoint($byKey['traffic_real'], $i);
             $this->assertGreaterThanOrEqual(2000, $traffic['traffic']);
             $this->assertLessThanOrEqual(5000, $traffic['traffic']);

@@ -17,10 +17,9 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
-
 class AdminDashgoalsControllerTest extends DashgoalsTestCase
 {
-    private function runChangeConfYearChild($year, $kpiSeed = array())
+    private function runChangeConfYearChild($year, $kpiSeed = [])
     {
         $resultFile = tempnam(sys_get_temp_dir(), 'dashgoals-change-year-');
         $this->assertNotFalse($resultFile);
@@ -31,15 +30,16 @@ class AdminDashgoalsControllerTest extends DashgoalsTestCase
             . escapeshellarg($resultFile) . ' ' . escapeshellarg((string) $year) . ' '
             . escapeshellarg($kpiJson);
 
-        $output = array();
+        $output = [];
         $exitCode = 0;
         exec($cmd . ' 2>&1', $output, $exitCode);
 
         $this->assertEquals(0, $exitCode, implode("\n", $output));
-        $this->assertFileExists($resultFile);
-        $payload = json_decode(file_get_contents($resultFile), true);
-        $this->assertTrue(is_array($payload));
+        $this->assertSame(['config.tpl'], $output);
+        $raw = file_get_contents($resultFile);
         unlink($resultFile);
+        $payload = json_decode($raw, true);
+        $this->assertTrue(is_array($payload));
 
         return $payload;
     }
@@ -48,7 +48,7 @@ class AdminDashgoalsControllerTest extends DashgoalsTestCase
     {
         $payload = $this->runChangeConfYearChild(
             '2024',
-            array('DASHGOALS_TRAFFIC_01_2024' => 333)
+            ['DASHGOALS_TRAFFIC_01_2024' => 333]
         );
 
         $this->assertSame(2024, $payload['year']);

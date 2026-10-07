@@ -17,34 +17,33 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
-
 class PrestaShopStub
 {
     public static function reset()
     {
-        Configuration::$store = array();
-        ConfigurationKPI::$store = array();
-        Tools::$submit = array();
-        Tools::$values = array();
+        Configuration::$store = [];
+        ConfigurationKPI::$store = [];
+        Tools::$submit = [];
+        Tools::$values = [];
         Tab::$lastAdded = null;
-        Tab::$deletedIds = array();
+        Tab::$deletedIds = [];
         Tab::$addResult = true;
-        Tab::$idMap = array();
+        Tab::$idMap = [];
         Module::$installResult = true;
         Module::$uninstallResult = true;
-        Module::$registerHookResults = array();
-        Module::$registeredHooks = array();
-        Module::$displayCalls = array();
-        AdminStatsController::$visitsCalls = array();
-        AdminStatsController::$ordersCalls = array();
-        AdminStatsController::$salesCalls = array();
-        AdminStatsController::$visitsSeries = array();
-        AdminStatsController::$ordersSeries = array();
-        AdminStatsController::$salesSeries = array();
-        AdminDashboardController::$jsPaths = array();
+        Module::$registerHookResults = [];
+        Module::$registeredHooks = [];
+        Module::$displayCalls = [];
+        AdminStatsController::$visitsCalls = [];
+        AdminStatsController::$ordersCalls = [];
+        AdminStatsController::$salesCalls = [];
+        AdminStatsController::$visitsSeries = [];
+        AdminStatsController::$ordersSeries = [];
+        AdminStatsController::$salesSeries = [];
+        AdminDashboardController::$jsPaths = [];
         Context::$instance = null;
-        $_GET = array();
-        $_POST = array();
+        $_GET = [];
+        $_POST = [];
     }
 }
 
@@ -55,9 +54,9 @@ class Module
     public $_path;
     public static $installResult = true;
     public static $uninstallResult = true;
-    public static $registerHookResults = array();
-    public static $registeredHooks = array();
-    public static $displayCalls = array();
+    public static $registerHookResults = [];
+    public static $registeredHooks = [];
+    public static $displayCalls = [];
 
     public function __construct()
     {
@@ -67,7 +66,7 @@ class Module
         }
     }
 
-    public function trans($id, $parameters = array(), $domain = null, $locale = null)
+    public function trans($id, $parameters = [], $domain = null, $locale = null)
     {
         return $id;
     }
@@ -98,7 +97,7 @@ class Module
 
     public function display($file, $template)
     {
-        self::$displayCalls[] = array('file' => $file, 'template' => $template);
+        self::$displayCalls[] = ['file' => $file, 'template' => $template];
 
         return $template;
     }
@@ -141,7 +140,7 @@ class Link
 
 class SmartyStub
 {
-    public $lastAssign = array();
+    public $lastAssign = [];
 
     public function assign($data)
     {
@@ -151,7 +150,7 @@ class SmartyStub
 
 class Configuration
 {
-    public static $store = array();
+    public static $store = [];
 
     public static function updateValue($key, $value)
     {
@@ -166,7 +165,7 @@ class Configuration
 
 class ConfigurationKPI
 {
-    public static $store = array();
+    public static $store = [];
 
     public static function updateValue($key, $value)
     {
@@ -181,8 +180,8 @@ class ConfigurationKPI
 
 class Tools
 {
-    public static $submit = array();
-    public static $values = array();
+    public static $submit = [];
+    public static $values = [];
 
     public static function strtoupper($string)
     {
@@ -202,32 +201,40 @@ class Tools
 
 class Tab
 {
+    public $id;
     public $active;
     public $class_name;
-    public $name = array();
+    public $name = [];
     public $id_parent;
     public $module;
 
+    public function __construct($id = null)
+    {
+        $this->id = $id;
+    }
+
     public static $lastAdded = null;
-    public static $deletedIds = array();
+    public static $deletedIds = [];
     public static $addResult = true;
-    public static $idMap = array();
+    public static $idMap = [];
 
     public function add()
     {
-        self::$lastAdded = array(
+        self::$lastAdded = [
             'active' => $this->active,
             'class_name' => $this->class_name,
             'name' => $this->name,
             'id_parent' => $this->id_parent,
             'module' => $this->module,
-        );
+        ];
 
         return self::$addResult;
     }
 
     public function delete()
     {
+        self::$deletedIds[] = $this->id;
+
         return true;
     }
 
@@ -241,39 +248,39 @@ class Language
 {
     public static function getLanguages($active = true)
     {
-        return array(
-            array('id_lang' => 1),
-            array('id_lang' => 2),
-        );
+        return [
+            ['id_lang' => 1],
+            ['id_lang' => 2],
+        ];
     }
 }
 
 class AdminStatsController
 {
-    public static $visitsCalls = array();
-    public static $ordersCalls = array();
-    public static $salesCalls = array();
-    public static $visitsSeries = array();
-    public static $ordersSeries = array();
-    public static $salesSeries = array();
+    public static $visitsCalls = [];
+    public static $ordersCalls = [];
+    public static $salesCalls = [];
+    public static $visitsSeries = [];
+    public static $ordersSeries = [];
+    public static $salesSeries = [];
 
     public static function getVisits($unique, $dateFrom, $dateTo, $granularity = false)
     {
-        self::$visitsCalls[] = array($unique, $dateFrom, $dateTo, $granularity);
+        self::$visitsCalls[] = [$unique, $dateFrom, $dateTo, $granularity];
 
         return self::$visitsSeries;
     }
 
     public static function getOrders($dateFrom, $dateTo, $granularity = false)
     {
-        self::$ordersCalls[] = array($dateFrom, $dateTo, $granularity);
+        self::$ordersCalls[] = [$dateFrom, $dateTo, $granularity];
 
         return self::$ordersSeries;
     }
 
     public static function getTotalSales($dateFrom, $dateTo, $granularity = false)
     {
-        self::$salesCalls[] = array($dateFrom, $dateTo, $granularity);
+        self::$salesCalls[] = [$dateFrom, $dateTo, $granularity];
 
         return self::$salesSeries;
     }
@@ -292,7 +299,7 @@ class ModuleAdminController
 
 class AdminDashboardController
 {
-    public static $jsPaths = array();
+    public static $jsPaths = [];
 
     public function addJs($path)
     {

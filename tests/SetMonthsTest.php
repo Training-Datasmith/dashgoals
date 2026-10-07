@@ -17,7 +17,6 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
-
 class SetMonthsTest extends DashgoalsTestCase
 {
     public function testReadsTwelveMonthsWithoutWriting()
@@ -41,7 +40,7 @@ class SetMonthsTest extends DashgoalsTestCase
     public function testSubmitWritesFloatsAndRereadsThem()
     {
         Tools::$submit['submitDashGoals'] = true;
-        for ($m = 1; $m <= 12; $m++) {
+        for ($m = 1; $m <= 12; ++$m) {
             $mm = sprintf('%02d', $m);
             $prefix = $mm . '_2024';
             Tools::$values['dashgoals_traffic_' . $prefix] = 100 + $m;
@@ -53,7 +52,7 @@ class SetMonthsTest extends DashgoalsTestCase
         $this->assertEquals(101.0, ConfigurationKPI::$store['DASHGOALS_TRAFFIC_01_2024']);
         $this->assertEquals(101, $months['01_2024']['values']['traffic']);
 
-        Tools::$submit = array();
+        Tools::$submit = [];
         $monthsAgain = $this->module->setMonths(2024);
         $this->assertEquals(101, $monthsAgain['01_2024']['values']['traffic']);
     }
