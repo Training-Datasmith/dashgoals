@@ -25,7 +25,7 @@ function bar_chart_goals(widget_name, chart_details)
 					if (graph.point.sales > 0)
 						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_down">' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
 					else
-						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')</div>';
+						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.empty_zone_text + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')</div>';
 				} else if (key == 'sales_more')
 					return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_up">+' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
 				else if (key == 'avg_cart_value_real') {
@@ -40,7 +40,7 @@ function bar_chart_goals(widget_name, chart_details)
 					if (graph.point.avg_cart_value > 0)
 						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_down">' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
 					else
-						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')</div>';
+						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.empty_zone_text + '</strong><br />(' + formatCurrency(parseInt(graph.point.goal), currency_format, currency_sign, currency_blank) + ')</div>';
 				} else if (key == 'avg_cart_value_more')
 					return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_up">+' + formatCurrency(parseInt(graph.point.goal_diff), currency_format, currency_sign, currency_blank) + '</span></div>';
 				else if (key == 'traffic_real') {
@@ -55,7 +55,7 @@ function bar_chart_goals(widget_name, chart_details)
 					if (graph.point.traffic > 0)
 						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_down">' + graph.point.goal_diff + ' ' +graph.series.unit_text+'</span></div>';
 					else
-						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br />(' + graph.point.goal + ' ' +graph.series.unit_text+')</div>';
+						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.empty_zone_text + '</strong><br />(' + graph.point.goal + ' ' +graph.series.unit_text+')</div>';
 				} else if (key == 'traffic_more')
 					return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_up">+' + graph.point.goal_diff + ' ' +graph.series.unit_text+'</span></div>';
 				else if (key == 'conversion_real') {
@@ -70,7 +70,7 @@ function bar_chart_goals(widget_name, chart_details)
 					if (graph.point.conversion > 0)
 						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_down">' + graph.point.goal_diff + '%</span></div>';
 					else
-						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br />(' + graph.point.goal + '%)</div>';
+						return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.empty_zone_text + '</strong><br />(' + graph.point.goal + '%)</div>';
 				} else if (key == 'conversion_more')
 					return '<div class="tooltip-panel"><div class="tooltip-panel-heading">' + graph.series.title + '</div><strong>' + graph.series.zone_text + '</strong><br /><span class="dash_trend dash_trend_up">+' + graph.point.goal_diff + '%</span></div>';
 

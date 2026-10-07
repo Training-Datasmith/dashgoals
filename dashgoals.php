@@ -70,15 +70,15 @@ class dashgoals extends Module
         Configuration::updateValue('PS_DASHGOALS_CURRENT_YEAR', date('Y'));
         for ($month = '01'; $month <= 12; $month = sprintf('%02d', (int) $month + 1)) {
             $key = Tools::strtoupper('dashgoals_traffic_' . $month . '_' . date('Y'));
-            if (!ConfigurationKPI::get($key)) {
+            if (ConfigurationKPI::get($key) === false) {
                 ConfigurationKPI::updateValue($key, 600);
             }
             $key = Tools::strtoupper('dashgoals_conversion_' . $month . '_' . date('Y'));
-            if (!ConfigurationKPI::get($key)) {
+            if (ConfigurationKPI::get($key) === false) {
                 ConfigurationKPI::updateValue($key, 2);
             }
             $key = Tools::strtoupper('dashgoals_avg_cart_value_' . $month . '_' . date('Y'));
-            if (!ConfigurationKPI::get($key)) {
+            if (ConfigurationKPI::get($key) === false) {
                 ConfigurationKPI::updateValue($key, 80);
             }
         }
@@ -210,6 +210,7 @@ class dashgoals extends Module
                     'title' => $stream_type['title'],
                     'unit_text' => $stream_type['unit_text'],
                     'zone_text' => $stream_zone['text'],
+                    'empty_zone_text' => ($stream_zone['zone'] == 'less' ? $this->trans('Goal set:', [], 'Modules.Dashgoals.Admin') : ''),
                     'color' => ($stream_zone['zone'] == 'more' ? self::$more_color[$key] : ($stream_zone['zone'] == 'less' ? self::$less_color[$key] : self::$real_color[$key])),
                     'values' => [],
                     'disabled' => (isset($stream_type['type']) && $stream_type['type'] == 'sales') ? false : true,
@@ -223,8 +224,8 @@ class dashgoals extends Module
 
         if (Configuration::get('PS_DASHBOARD_SIMULATION')) {
             $visits = $orders = $sales = [];
-            $from = strtotime(date('Y-01-01 00:00:00'));
-            $to = strtotime(date('Y-12-31 00:00:00'));
+            $from = strtotime($year . '-01-01 00:00:00');
+            $to = strtotime($year . '-12-31 00:00:00');
             for ($date = $from; $date <= $to; $date = strtotime('+1 day', $date)) {
                 $visits[$date] = round(rand(2000, 5000));
                 $orders[$date] = round(rand(40, 100));
@@ -266,7 +267,6 @@ class dashgoals extends Module
                 }
 
                 if ($value == 0) {
-                    $streams['traffic']['less']['zone_text'] = $this->trans('Goal set:', [], 'Modules.Dashgoals.Admin');
                     $stream_values['less']['goal'] = $month_goal;
                 }
 
@@ -294,7 +294,6 @@ class dashgoals extends Module
                 }
 
                 if ($value == 0) {
-                    $streams['conversion']['less']['zone_text'] = $this->trans('Goal set:', [], 'Modules.Dashgoals.Admin');
                     $stream_values['less']['goal'] = $month_goal;
                 }
 
@@ -322,7 +321,6 @@ class dashgoals extends Module
                 }
 
                 if ($value == 0) {
-                    $streams['avg_cart_value']['less']['zone_text'] = $this->trans('Goal set:', [], 'Modules.Dashgoals.Admin');
                     $stream_values['less']['goal'] = $month_goal;
                 }
 
@@ -351,7 +349,6 @@ class dashgoals extends Module
                 }
 
                 if ($value == 0) {
-                    $streams['sales']['less']['zone_text'] = $this->trans('Goal set:', [], 'Modules.Dashgoals.Admin');
                     $stream_values['less']['goal'] = $month_goal;
                 }
 
@@ -400,7 +397,6 @@ class dashgoals extends Module
                 }
 
                 if ($value == 0) {
-                    $streams['traffic']['less']['zone_text'] = $this->trans('Goal set:', [], 'Modules.Dashgoals.Admin');
                     $stream_values['less']['goal'] = $month_goal;
                 }
 
@@ -411,7 +407,7 @@ class dashgoals extends Module
                 $month_goal = (float) ConfigurationKPI::get('DASHGOALS_CONVERSION_' . $i . '_' . $year);
                 $value = 100 * ((isset($visits[$timestamp]) && $visits[$timestamp] && isset($orders[$timestamp]) && $orders[$timestamp]) ? ($orders[$timestamp] / $visits[$timestamp]) : 0);
                 $stream_values = $this->getValuesFromGoals($average_goals['conversion'] * 100, $month_goal, $value, self::$month_labels[$i]);
-                $goal_diff = $value - (int) $month_goal;
+                $goal_diff = $value - $month_goal;
                 $stream_values['real']['conversion'] = round($value, 2);
                 $stream_values['real']['goal'] = round($month_goal, 2);
                 if ($value > 0) {
@@ -428,7 +424,6 @@ class dashgoals extends Module
                 }
 
                 if ($value == 0) {
-                    $streams['conversion']['less']['zone_text'] = $this->trans('Goal set:', [], 'Modules.Dashgoals.Admin');
                     $stream_values['less']['goal'] = $month_goal;
                 }
 
@@ -456,7 +451,6 @@ class dashgoals extends Module
                 }
 
                 if ($value == 0) {
-                    $streams['avg_cart_value']['less']['zone_text'] = $this->trans('Goal set:', [], 'Modules.Dashgoals.Admin');
                     $stream_values['less']['goal'] = $month_goal;
                 }
 
@@ -488,7 +482,6 @@ class dashgoals extends Module
                 }
 
                 if ($value == 0) {
-                    $streams['sales']['less']['zone_text'] = $this->trans('Goal set:', [], 'Modules.Dashgoals.Admin');
                     $stream_values['less']['goal'] = $month_goal;
                 }
 
